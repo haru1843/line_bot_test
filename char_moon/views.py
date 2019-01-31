@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 
-# from django.shortcuts import render
-# import json
-# import requests
+from django.shortcuts import render
+import json
+import requests
 # from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
