@@ -1,0 +1,1 @@
+web: gunicorn python_product.wsgi char_moon:app --log-file -
