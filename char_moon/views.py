@@ -3,6 +3,7 @@
 from django.shortcuts import render
 import json
 import requests
+from django.http import HttpResponse
 # Create your views here.
 
 REPLY_ENDPOINT = 'https://api.line.me/v2/bot/message/reply'
