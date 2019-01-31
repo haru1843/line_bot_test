@@ -12,6 +12,9 @@ HEADER = {
     "Authorization": "Bearer " +  ACCESS_TOKEN
 }
 
+def index(request):
+    return HttpResponse("This is bot api.")
+
 def reply_text(reply_token, text):
     reply = "hello"
     payload = {
