@@ -1,6 +1,6 @@
 build:
     languages:
-        - python
+        - python3
     packages:
         - libopencv-dev
 run:
