@@ -94,7 +94,7 @@ class img2moon():
 
     def get_text(self):
         text = ""
-        for indexes int self.moon_index_list:
+        for indexes in self.moon_index_list:
             for index in indexes:
                 text += self.moon_list[index]
             text += '\n'
