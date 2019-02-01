@@ -176,7 +176,7 @@ def disp_moon(request):
 
             message_id = e['message']['id']  # to get messageID
             message_content = line_bot_api.get_message_content(message_id)
-            img_pil = Image.open(BytesIO(message_content.content)) # バイナリストリーム -> PILイメージ
+            img_pil = Image.open(io.BytesIO(message_content.content)) # バイナリストリーム -> PILイメージ
             img_np = np.asarray(img_pil) # PIL -> numpy配列(RGBA)
             img_np_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGBA2BGR) # RGBA -> BGR
             img_np_gray = cv2.cvtColor(img_np_bgr, cv2.COLOR_BGR2GRAY) # BGR -> GRAY
