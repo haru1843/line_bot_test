@@ -199,8 +199,8 @@ def reply_result_in_word2vec(text   , model_surface, reply_token):
 
     text_in_surface += '>> surfaceモデル\n'
     for i, result in enumerate(result_surface_list):
-        text_in_surface += "{:2}位 : \n".format(i + 1) + result[0]
-        text_in_surface += '   ' + "{:.3f}\n".format(100*result[1])
+        text_in_surface += "{:2}位 : ".format(i + 1) + result[0] + "\n"
+        text_in_surface += '   ' + "{:.3f}%\n".format(100*result[1])
 
     reply += reply_text(reply_token, text_in_surface)
 
