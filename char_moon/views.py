@@ -10,6 +10,7 @@ import numpy as np
 import math
 import io
 from PIL import Image
+from gensim.models import word2vec
 
 
 class img2moon():
@@ -183,13 +184,76 @@ def disp_moon(request):
 
             ret, thresh_img = cv2.threshold(img_np_gray, 0, 255, cv2.THRESH_OTSU)
 
-            moon_img = img2moon(thresh_img)
-            moon_img.creat_moon_index_list()
+            # moon_img = img2moon(thresh_img)
+            # moon_img.creat_moon_index_list()
             reply += reply_text(reply_token, text=moon_img.get_text())
 
     return HttpResponse(reply)  # for test
 
+def reply_result_in_word2vec(text, model_org, model_surface, reply_token):
+    reply = ""
+    result_org_list = model_org.most_similar(positive=text, topn=20)
+    result_surface_list = model_surface.most_similar(positive=text, topn=20)
 
+    reply += reply_text(reply_token, "[{}]に近い言葉は…".format(text))
+
+    text_in_org = '>> orgモデル\n'
+    for i, result in enumerate(result_org_list):
+        text_in_org += "{:2}位 : ".format(i + 1) + result[0]
+        text_in_org += '   ' + "{:.3f}".format(100*result[1])
+    
+    reply += reply_text(reply_token, text_in_org)
+
+    text_in_surface = '>> surfaceモデル\n'
+    for i, result in enumerate(result_surface_list):
+        text_in_surface += "{:2}位 : ".format(i + 1) + result[0]
+        text_in_surface += '   ' + "{:.3f}".format(100*result[1])
+
+    reply += reply_text(reply_token, text_in_surface)
+
+    return reply
+
+
+def identify_request(request):
+    reply = ""
+    request_json = json.loads(request.body.decode('utf-8'))  # to get json
+
+    for e in request_json['events']:
+        reply_token = e['replyToken']  # to get reply_token
+        message_type = e['message']['type']  # to get type
+
+        # テキスト形式ならword2vecの結果を返す
+        if message_type == 'text':
+            
+            text = e['message']['text']  # to get message
+
+            model_org = word2vec.Word2Vec.load("org.model")
+            model_surface = word2vec.Word2Vec.load('surface.model')
+
+            if text in model_org:
+                reply += reply_result_in_word2vec(text, model_org, model_surface, reply_token)
+            else:
+                reply += reply_text(reply_token, "指定された単語が辞書に存在しません.")
+
+            # reply for image
+        if message_type == 'image':
+            line_bot_api = LineBotApi(ACCESS_TOKEN)
+
+            message_id = e['message']['id']  # to get messageID
+            message_content = line_bot_api.get_message_content(message_id)
+            img_pil = Image.open(io.BytesIO(message_content.content)) # バイナリストリーム -> PILイメージ
+            img_np = np.asarray(img_pil) # PIL -> numpy配列(RGBA)
+            img_np_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGBA2BGR) # RGBA -> BGR
+            img_np_gray = cv2.cvtColor(img_np_bgr, cv2.COLOR_BGR2GRAY) # BGR -> GRAY
+
+            ret, thresh_img = cv2.threshold(img_np_gray, 0, 255, cv2.THRESH_OTSU)
+
+            # moon_img = img2moon(thresh_img)
+            # moon_img.creat_moon_index_list()
+            reply += reply_text(reply_token, text=moon_img.get_text())
+
+    return HttpResponse(reply)  # for test
+    
 
 # @csrf_exempt
 # def webhook(request):
