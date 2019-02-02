@@ -222,7 +222,7 @@ def identify_request(request):
 
             model_surface = word2vec.Word2Vec.load(BASE_DIR + '/data/surface.model')
 
-            if text in model_org:
+            if text in model_surface:
                 reply += reply_result_in_word2vec(text, model_surface, reply_token)
             else:
                 reply += reply_text(reply_token, "指定された単語が辞書に存在しません.")
