@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.shortcuts import render
-from djangoproject.settings import BASE_DIR
+from python_product.settings import BASE_DIR
 import json
 import requests
 from django.http import HttpResponse
@@ -220,7 +220,7 @@ def identify_request(request):
             
             text = e['message']['text']  # to get message
 
-            model_surface = word2vec.Word2Vec.load('surface.model')
+            model_surface = word2vec.Word2Vec.load(BASE_DIR + '/data/surface.model')
 
             if text in model_org:
                 reply += reply_result_in_word2vec(text, model_surface, reply_token)
