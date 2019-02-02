@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.shortcuts import render
+from djangoproject.settings import BASE_DIR
 import json
 import requests
 from django.http import HttpResponse
@@ -190,7 +191,7 @@ def disp_moon(request):
 
     return HttpResponse(reply)  # for test
 
-def reply_result_in_word2vec(text, model_surface, reply_token):
+def reply_result_in_word2vec(text   , model_surface, reply_token):
     reply = ""
     result_surface_list = model_surface.most_similar(positive=text, topn=20)
 
