@@ -190,19 +190,11 @@ def disp_moon(request):
 
     return HttpResponse(reply)  # for test
 
-def reply_result_in_word2vec(text, model_org, model_surface, reply_token):
+def reply_result_in_word2vec(text, model_surface, reply_token):
     reply = ""
-    result_org_list = model_org.most_similar(positive=text, topn=20)
     result_surface_list = model_surface.most_similar(positive=text, topn=20)
 
     reply += reply_text(reply_token, "[{}]に近い言葉は…".format(text))
-
-    text_in_org = '>> orgモデル\n'
-    for i, result in enumerate(result_org_list):
-        text_in_org += "{:2}位 : ".format(i + 1) + result[0]
-        text_in_org += '   ' + "{:.3f}".format(100*result[1])
-    
-    reply += reply_text(reply_token, text_in_org)
 
     text_in_surface = '>> surfaceモデル\n'
     for i, result in enumerate(result_surface_list):
@@ -227,11 +219,10 @@ def identify_request(request):
             
             text = e['message']['text']  # to get message
 
-            model_org = word2vec.Word2Vec.load("org.model")
             model_surface = word2vec.Word2Vec.load('surface.model')
 
             if text in model_org:
-                reply += reply_result_in_word2vec(text, model_org, model_surface, reply_token)
+                reply += reply_result_in_word2vec(text, model_surface, reply_token)
             else:
                 reply += reply_text(reply_token, "指定された単語が辞書に存在しません.")
 
