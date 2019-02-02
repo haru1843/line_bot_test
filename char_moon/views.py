@@ -195,12 +195,12 @@ def reply_result_in_word2vec(text   , model_surface, reply_token):
     reply = ""
     result_surface_list = model_surface.most_similar(positive=text, topn=20)
 
-    reply += reply_text(reply_token, "[{}]に近い言葉は…".format(text))
+    reply += "[{}]に近い言葉は…\n".format(text)
 
-    text_in_surface = '>> surfaceモデル\n'
+    reply += '>> surfaceモデル\n'
     for i, result in enumerate(result_surface_list):
-        text_in_surface += "{:2}位 : ".format(i + 1) + result[0]
-        text_in_surface += '   ' + "{:.3f}".format(100*result[1])
+        text_in_surface += "{:2}位 : \n".format(i + 1) + result[0]
+        text_in_surface += '   ' + "{:.3f}\n".format(100*result[1])
 
     reply += reply_text(reply_token, text_in_surface)
 
