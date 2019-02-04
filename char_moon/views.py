@@ -240,8 +240,8 @@ def identify_request(request):
 
             ret, thresh_img = cv2.threshold(img_np_gray, 0, 255, cv2.THRESH_OTSU)
 
-            # moon_img = img2moon(thresh_img)
-            # moon_img.creat_moon_index_list()
+            moon_img = img2moon(thresh_img)
+            moon_img.creat_moon_index_list()
             reply += reply_text(reply_token, text=moon_img.get_text())
 
     return HttpResponse(reply)  # for test
